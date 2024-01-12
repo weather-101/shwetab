@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Dto.AdminDTO;
+import com.example.Dto.LoginDTO;
 import com.example.Entity.Admin;
 import com.example.Entity.User;
 import com.example.Service.AdminService;
+import com.example.response.LoginResponse;
 
 @RestController
-@RequestMapping("/admin")
+//@RequestMapping("/admin")
 @CrossOrigin
 public class AdminController {
 	
@@ -56,20 +58,24 @@ public class AdminController {
 	}
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticateAdmin(@RequestBody AdminDTO adminDTO) {
-        String username = adminDTO.getUsername();
-        String password = adminDTO.getPassword();
-
-        Admin admin = adminService.findAdminByUsername(username);
-
-        if (adminService.authenticateAdmin(admin, password)) {
-            return ResponseEntity.ok("{\"status\": true, \"message\": \"Admin authentication successful\"}");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("{\"status\": false, \"message\": \"Invalid credentials or Admin not found\"}");
-        }
+    public ResponseEntity<?> loginAdmin(@RequestBody LoginDTO loginDTO) {
+//        String email = adminDTO.getEmail();
+//        String password = adminDTO.getPassword();
+//
+//        Admin admin = adminService.findAdminByUsername(email);
+//
+//        if (adminService.authenticateAdmin(admin, password)) {
+//            return ResponseEntity.ok("{\"status\": true, \"message\": \"Admin authentication successful\"}");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body("{\"status\": false, \"message\": \"Invalid credentials or Admin not found\"}");
+//        }
+    	
+    	LoginResponse loginResponse = adminService.loginAdmin(loginDTO);
+		return ResponseEntity.ok(loginResponse);
     }
 
+	
     
     
     @GetMapping("/getUsers")

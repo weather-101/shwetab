@@ -16,14 +16,23 @@ public class Admin {
 
     @Column(name = "password", length = 255)
     private String password;
+    
+    @Column(name = "email", length = 50)
+	private String email;
+    
+    private String confirmpassword;
 
-    public Admin() {
-        this.username = "admin";
-        this.password = "admin123"; // Password is "admin123"
-    }
-
+  
 	public int getAdminId() {
 		return adminId;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public void setAdminId(int adminId) {
@@ -45,5 +54,32 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getConfirmpassword() {
+		return confirmpassword;
+	}
+	public void setConfirmpassword(String confirmpassword) {
+		this.confirmpassword = confirmpassword;
+	}
+
+	public Admin(int adminId, String username, String password, String email, String confirmpassword) {
+		super();
+		this.adminId = adminId;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.confirmpassword = confirmpassword;
+	}
+
+	@Override
+	public String toString() {
+		return "Admin [adminId=" + adminId + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", confirmpassword=" + confirmpassword + "]";
+	}
+
+	public Admin() {
+		super();
+	}
+
+
 
 }

@@ -175,11 +175,11 @@ button {
 
     <form id = "signup"  method="post" autocomplete="off">
 
-        <div class="form-group">
+       <div class="form-group">
 
             <label>Role</label>
 
-            <select name="userType">
+            <select name="userType" id="userType">
 
                 <option value="user">User</option>
 
@@ -187,7 +187,7 @@ button {
 
             </select>
 
-        </div>
+        </div> 
 
         <div>
 
@@ -260,21 +260,7 @@ button {
 
     <script>
         // Function to generate OTP and show the OTP input field
-        function generateOTP() {
-            var email = document.getElementsByName("email")[0].value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "GenerateOTP?email=" + email, true);
-            xhr.send();
-        }
-
-
         
-            document.querySelector('form').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                // Redirect to the login page
-                window.location.href = 'comlogin.html'; // Replace '/login' with your actual login page URL
-            });
 
             //-------#########################
             function signup() {
@@ -282,11 +268,52 @@ button {
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 const confirmpassword = document.getElementById('confirmpassword').value;
+                const userType = document.getElementById('userType').value;
                 
                 if (password !== confirmpassword) {
                     alert("Passwords do not match");
+                    window.location.href = 'sign.html';
                     return;
                 }
+                
+               // if (password.length < 8) {
+                //    alert("Password should contain at least 8 characters");
+              //      window.location.href = 'sign.html';
+              //      return;
+                //}
+                
+                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    alert("Password should be at least 8 characters long and contain at least one special character and one number");
+                    window.location.href = 'sign.html';
+                    return;
+                }
+                
+                if (!username || !email || !password || !confirmpassword) {
+                    alert("Please fill in all fields");
+                    window.location.href = 'sign.html';
+                    return;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert("Invalid email format");
+                    window.location.href = 'sign.html';
+                    return;
+                }
+                //john.doe@example.com  , user123@domain.co , contact@my-site.net
+                //john.doe@ example.com (contains a space before the '@' symbol)  ,user123@domain (missing dot after '@' symbol)
+				// @invalid.com (no characters before '@' symbol)
+				
+			
+				 let registrationEndpoint;
+
+				    if (userType === 'admin') {
+				        registrationEndpoint = '/admin/registerAdmin';
+				    } else {
+				        registrationEndpoint = '/save';
+				    }
+
                 const data = {
                     userid: 0, // You may generate the user ID or handle it differently
                     username: username,
@@ -295,7 +322,10 @@ button {
                     confirmpassword : confirmpassword
                 };
                 
-                fetch('/save', {
+              //  /admin/registerAdmin
+               
+              
+                fetch(registrationEndpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -307,7 +337,7 @@ button {
                     // Handle response from backend (data contains user ID or message)
                     alert('User ID: ' + data);
                     // Redirect to login page or another page upon successful signup
-                    window.location.href = '/comlogin.html';
+                    window.location.href = 'comlogin.html';
                 })
                 .catch(error => console.error('Error:', error));
             }
@@ -315,6 +345,7 @@ button {
             document.getElementById('signup').addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
                 // Manually trigger the login function
+               
             });
 
     </script>
@@ -324,5 +355,3 @@ button {
 </body>
 
 </html>
-
-

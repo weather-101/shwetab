@@ -331,8 +331,8 @@ option[value="user"] {
                 </select>
             </div> -->
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username" name="username" required>
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Enter email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -406,15 +406,19 @@ document.getElementById("forgotPasswordLink").addEventListener("click", function
 
 //-=======================================
 	function login() {
-            const email = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value; 
             
             const data = {
-                username: username,
-                password: password
+                email: email,
+                password: password,
+                role: role
             };
             
-            fetch('/login', {
+            const endpoint = role === 'admin' ? '/authenticate' : '/login';
+            
+            fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -427,7 +431,9 @@ document.getElementById("forgotPasswordLink").addEventListener("click", function
                 alert(data.message);
                 if(data.status) {
                     // Redirect to dashboard or another page upon successful login
-                    window.location.href = 'userdashboard/index.html';
+                    const dashboardURL = role === 'admin' ? '/html/index.html' : 'userdashboard/index.html';
+               		window.location.href = dashboardURL;
+                    
                 }
                 
                 else {
@@ -441,6 +447,7 @@ document.getElementById("forgotPasswordLink").addEventListener("click", function
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
              // Manually trigger the login function
+             login();
         });
 
 
